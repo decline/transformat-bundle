@@ -58,9 +58,8 @@ class FormatService
             try {
                 $filePath = $directory . '/' . $file;
 
-                // @TODO: make extension configurable
                 // ignore files with unsupported extension
-                if (pathinfo($filePath, PATHINFO_EXTENSION) !== 'xlf') {
+                if (pathinfo($filePath, PATHINFO_EXTENSION) !== $this->config['xliff']['extension']) {
                     continue;
                 }
 
