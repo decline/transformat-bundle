@@ -1,0 +1,4 @@
+services:
+    decline_transformat.format:
+        class: Decline\TransformatBundle\Services\FormatService
+        arguments: ["%decline_transformat%", "@twig"]
