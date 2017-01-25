@@ -1,0 +1,22 @@
+{
+    "name": "decline/transformat-bundle",
+    "description": "Symfony Bundle to format and sort translation files",
+    "keywords": ["translations", "formatting"],
+    "type": ["symfony-bundle"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dominik Huppmann",
+            "email": "dominik.huppmann@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "symfony/symfony": "^3.0",
+        "sensio/framework-extra-bundle": "^3.0"
+    },
+    "autoload": {
+        "psr-4": { "Decline\\TransformatBundle\\": "" }
+    },
+    "minimum-stability": "stable"
+}
