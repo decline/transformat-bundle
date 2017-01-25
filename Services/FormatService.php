@@ -64,7 +64,7 @@ class FormatService
                 $this->formatSingleFile($file);
                 $msg = sprintf('<info>Success:</info> %s', $file->getFilename());
             } catch (Exception $e) {
-                $errors[] = $file.': '.$e->getMessage();
+                $errors[] = $file->getFilename().': '.$e->getMessage();
                 $msg = sprintf('<fg=red>Failure:</fg=red> %s', $file->getFilename());
             }
 
@@ -161,6 +161,7 @@ class FormatService
 
         // render template
         $twigContext = [
+            'namespace' => $this->getXliffNamespace(),
             'sourceLanguage' => $this->getXliffSourceLanguage(),
             'transUnits' => $transUnits,
         ];
