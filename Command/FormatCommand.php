@@ -3,6 +3,7 @@
 namespace Decline\TransformatBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -14,12 +15,15 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class FormatCommand extends ContainerAwareCommand
 {
 
+    const ARGUMENT_FILENAME = 'filename';
+
     /**
      * Configuration for the FormatCommand
      */
     protected function configure()
     {
         $this
+            ->addArgument(static::ARGUMENT_FILENAME, InputArgument::OPTIONAL, 'A single filename in the configured directory.')
             ->setName('transformat:format')
             ->setDescription('Format translation files.')
             ->setHelp('Formats the configured set of translation files and performs some validity checks.')
@@ -39,7 +43,10 @@ class FormatCommand extends ContainerAwareCommand
 
         $io->text('Starting to format translation files:');
 
-        $errors = $this->getContainer()->get('decline_transformat.format')->format($io);
+        $errors = $this->getContainer()->get('decline_transformat.format')->format(
+            $io,
+            $input->getArgument(static::ARGUMENT_FILENAME)
+        );
 
         $io->newLine();
 
