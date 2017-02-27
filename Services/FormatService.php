@@ -3,6 +3,7 @@
 namespace Decline\TransformatBundle\Services;
 
 use Decline\TransformatBundle\Exception\DuplicateKeyException;
+use Decline\TransformatBundle\Exception\InvalidSchemaException;
 use Decline\TransformatBundle\Exception\NoTransUnitsFoundException;
 use Exception;
 use SimpleXMLElement;
@@ -31,14 +32,21 @@ class FormatService
     private $twig;
 
     /**
+     * @var ValidatorService
+     */
+    private $validator;
+
+    /**
      * FormatService constructor.
      * @param $config
      * @param \Twig_Environment $twig
+     * @param ValidatorService $validator
      */
-    public function __construct($config, \Twig_Environment $twig)
+    public function __construct($config, \Twig_Environment $twig, ValidatorService $validator)
     {
         $this->config = $config;
         $this->twig = $twig;
+        $this->validator = $validator;
     }
 
     /**
@@ -124,6 +132,8 @@ class FormatService
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      * @throws \Decline\TransformatBundle\Exception\NoTransUnitsFoundException
+     * @throws \Symfony\Component\Filesystem\Exception\FileNotFoundException
+     * @throws \Decline\TransformatBundle\Exception\InvalidSchemaException
      */
     private function formatSingleFile(File $file)
     {
@@ -136,8 +146,16 @@ class FormatService
             throw new FileException('File %s is not writable!', $file->getFilename());
         }
 
-        // @TODO: validate against schema
-        $xml = new SimpleXMLElement(file_get_contents($file->getPathname()));
+        // get content of xliff file
+        $xliffContent = file_get_contents($file->getPathname());
+
+        // validate xliff against schema
+        $validationErrors = $this->validator->validate($xliffContent);
+        if (count($validationErrors)) {
+            throw new InvalidSchemaException($validationErrors[0]->message, $file->getFilename());
+        }
+
+        $xml = new SimpleXMLElement($xliffContent);
         $xml->registerXPathNamespace('x', $this->getXliffNamespace());
         $transUnits = array();
         foreach ($xml->xpath('//x:file/x:body/x:trans-unit') as $translation) {

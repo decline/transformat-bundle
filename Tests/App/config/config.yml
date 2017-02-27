@@ -6,7 +6,3 @@ framework:
 
 decline_transformat:
     directory: "%kernel.root_dir%/Resources/translations"
-    xliff:
-        sourceLanguage: en
-        extension: xlf
-        namespace: "urn:oasis:names:tc:xliff:document:1.2"

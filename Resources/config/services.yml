@@ -1,4 +1,8 @@
 services:
+    decline_transformat.validator:
+        class: Decline\TransformatBundle\Services\ValidatorService
+        arguments: ["%decline_transformat%"]
+
     decline_transformat.format:
         class: Decline\TransformatBundle\Services\FormatService
-        arguments: ["%decline_transformat%", "@twig"]
+        arguments: ["%decline_transformat%", "@twig", "@decline_transformat.validator"]
