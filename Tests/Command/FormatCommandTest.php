@@ -3,17 +3,15 @@
 namespace Decline\TransformatBundle\Tests\Command;
 
 use Decline\TransformatBundle\Command\FormatCommand;
-use Decline\TransformatBundle\Tests\App\AppKernel;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Decline\TransformatBundle\Tests\ContainerTestCase;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\BufferedOutput;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class FormatCommandTest
  * @package Decline\TransformatBundle\Tests\Command
  */
-class FormatCommandTest extends KernelTestCase
+class FormatCommandTest extends ContainerTestCase
 {
 
     const EXECUTE_OUTPUT_RESULT_OK = '[OK] Done.';
@@ -23,27 +21,6 @@ class FormatCommandTest extends KernelTestCase
     const EXECUTE_OUTPUT_RESULT_FAIL_TRANS_UNITS = '[ERROR] no-trans-units.de.xlf: No trans-units could be found';
 
     const EXECUTE_OUTPUT_RESULT_FAIL_DUPLICATE_KEY = '[ERROR] duplicate-keys.de.xlf: Duplicate translation key';
-
-    /**
-     * The class of the Kernel to boot for this test
-     * @var string
-     */
-    protected static $class = AppKernel::class;
-
-    /**
-     * The Container
-     * @var ContainerInterface
-     */
-    private static $container;
-
-    /**
-     * @inheritdoc
-     */
-    public static function setUpBeforeClass()
-    {
-        self::bootKernel();
-        self::$container = self::$kernel->getContainer();
-    }
 
     /**
      * Tests the execute method the FormatCommand
