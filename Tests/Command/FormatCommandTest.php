@@ -7,6 +7,7 @@ use Decline\TransformatBundle\Tests\App\AppKernel;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class FormatCommandTest
@@ -15,11 +16,13 @@ use Symfony\Component\Console\Output\BufferedOutput;
 class FormatCommandTest extends KernelTestCase
 {
 
-    /**
-     * The expected result of the console output
-     * @var string
-     */
-    const EXECUTE_EXPECTED_OUTPUT_RESULT = '[OK] Done.';
+    const EXECUTE_OUTPUT_RESULT_OK = '[OK] Done.';
+
+    const EXECUTE_OUTPUT_RESULT_FAIL = '[ERROR] No supported files could be found in the configured directory';
+
+    const EXECUTE_OUTPUT_RESULT_FAIL_TRANS_UNITS = '[ERROR] no-trans-units.de.xlf: No trans-units could be found';
+
+    const EXECUTE_OUTPUT_RESULT_FAIL_DUPLICATE_KEY = '[ERROR] duplicate-keys.de.xlf: Duplicate translation key';
 
     /**
      * The class of the Kernel to boot for this test
@@ -28,32 +31,101 @@ class FormatCommandTest extends KernelTestCase
     protected static $class = AppKernel::class;
 
     /**
+     * The Container
+     * @var ContainerInterface
+     */
+    private static $container;
+
+    /**
      * @inheritdoc
      */
     public static function setUpBeforeClass()
     {
         self::bootKernel();
+        self::$container = self::$kernel->getContainer();
     }
 
     /**
      * Tests the execute method the FormatCommand
      */
     public function testExecute() {
-        $input = new ArgvInput([FormatCommand::COMMAND_NAME]);
-        $output = new BufferedOutput();
-
-        // create Command and set container
-        $formatCommand = new FormatCommand();
-        $formatCommand->setContainer(self::$kernel->getContainer());
-
-        // run command
-        $result = $formatCommand->run($input, $output);
+        list($result, $output) = $this->runCommand([FormatCommand::COMMAND_NAME]);
 
         // check result code
         $this->assertEquals(0, $result);
 
         // output must end as expected
-        $outputResult = trim($output->fetch());
-        $this->assertStringEndsWith(self::EXECUTE_EXPECTED_OUTPUT_RESULT, $outputResult);
+        $this->assertStringEndsWith(self::EXECUTE_OUTPUT_RESULT_OK, trim($output->fetch()));
+    }
+
+    /**
+     * Tests the execute method the FormatCommand with a non-existing file
+     */
+    public function testExecuteWithNonExistingFile() {
+        list($result, $output) = $this->runCommand([FormatCommand::COMMAND_NAME, 'foo/bar/foobar.xlf']);
+
+        // check result code
+        $this->assertEquals(0, $result);
+
+        // output must end as expected
+        $this->assertContains(self::EXECUTE_OUTPUT_RESULT_FAIL, $output->fetch());
+    }
+
+    /**
+     * Tests the execute method the FormatCommand with a file that should be ignored because of its file-ending
+     */
+    public function testExecuteWithIgnoredFile() {
+        list($result, $output) = $this->runCommand([FormatCommand::COMMAND_NAME, 'ignored.txt']);
+
+        // check result code
+        $this->assertEquals(0, $result);
+
+        // output must end as expected
+        $this->assertContains(self::EXECUTE_OUTPUT_RESULT_FAIL, $output->fetch());
+    }
+
+    /**
+     * Tests the execute method the FormatCommand with a file that should generate an error because of missing trans-units
+     */
+    public function testExecuteWithoutTransUnits() {
+        list($result, $output) = $this->runCommand([FormatCommand::COMMAND_NAME, '../translations-faulty/no-trans-units.de.xlf']);
+
+        // check result code
+        $this->assertEquals(0, $result);
+
+        // output must end as expected
+        $this->assertContains(self::EXECUTE_OUTPUT_RESULT_FAIL_TRANS_UNITS, $output->fetch());
+    }
+
+    /**
+     * Tests the execute method the FormatCommand with a file that should generate an error because of duplicate keys
+     */
+    public function testExecuteWithDuplicateKeys() {
+        list($result, $output) = $this->runCommand([FormatCommand::COMMAND_NAME, '../translations-faulty/duplicate-keys.de.xlf']);
+
+        // check result code
+        $this->assertEquals(0, $result);
+
+        // output must end as expected
+        $this->assertContains(self::EXECUTE_OUTPUT_RESULT_FAIL_DUPLICATE_KEY, $output->fetch());
+    }
+
+    /**
+     * Runs the command and returns the result of it along with the output object
+     * @param array $argv
+     * @return array
+     */
+    private function runCommand(array $argv = []) {
+        $input = new ArgvInput($argv);
+        $output = new BufferedOutput();
+
+        // create Command and set container
+        $formatCommand = new FormatCommand();
+        $formatCommand->setContainer(self::$container);
+
+        // run command
+        $result = $formatCommand->run($input, $output);
+
+        return [$result, $output];
     }
 }

@@ -1,5 +1,6 @@
 Tests/App/cache
 Tests/App/logs
+Tests/Coverage
 vendor
 
 composer.lock
