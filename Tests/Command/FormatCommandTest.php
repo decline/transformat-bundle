@@ -25,7 +25,8 @@ class FormatCommandTest extends ContainerTestCase
     /**
      * Tests the execute method the FormatCommand
      */
-    public function testExecute() {
+    public function testExecute()
+    {
         list($result, $output) = $this->runCommand([FormatCommand::COMMAND_NAME]);
 
         // check result code
@@ -38,7 +39,8 @@ class FormatCommandTest extends ContainerTestCase
     /**
      * Tests the execute method the FormatCommand with a non-existing file
      */
-    public function testExecuteWithNonExistingFile() {
+    public function testExecuteWithNonExistingFile()
+    {
         list($result, $output) = $this->runCommand([FormatCommand::COMMAND_NAME, 'foo/bar/foobar.xlf']);
 
         // check result code
@@ -51,7 +53,8 @@ class FormatCommandTest extends ContainerTestCase
     /**
      * Tests the execute method the FormatCommand with a file that should be ignored because of its file-ending
      */
-    public function testExecuteWithIgnoredFile() {
+    public function testExecuteWithIgnoredFile()
+    {
         list($result, $output) = $this->runCommand([FormatCommand::COMMAND_NAME, 'ignored.txt']);
 
         // check result code
@@ -64,8 +67,11 @@ class FormatCommandTest extends ContainerTestCase
     /**
      * Tests the execute method the FormatCommand with a file that should generate an error because of missing trans-units
      */
-    public function testExecuteWithoutTransUnits() {
-        list($result, $output) = $this->runCommand([FormatCommand::COMMAND_NAME, '../translations-faulty/no-trans-units.de.xlf']);
+    public function testExecuteWithoutTransUnits()
+    {
+        list($result, $output) = $this->runCommand(
+            [FormatCommand::COMMAND_NAME, '../translations-faulty/no-trans-units.de.xlf']
+        );
 
         // check result code
         $this->assertEquals(0, $result);
@@ -77,8 +83,11 @@ class FormatCommandTest extends ContainerTestCase
     /**
      * Tests the execute method the FormatCommand with a file that should generate an error because of duplicate keys
      */
-    public function testExecuteWithDuplicateKeys() {
-        list($result, $output) = $this->runCommand([FormatCommand::COMMAND_NAME, '../translations-faulty/duplicate-keys.de.xlf']);
+    public function testExecuteWithDuplicateKeys()
+    {
+        list($result, $output) = $this->runCommand(
+            [FormatCommand::COMMAND_NAME, '../translations-faulty/duplicate-keys.de.xlf']
+        );
 
         // check result code
         $this->assertEquals(0, $result);
@@ -92,7 +101,8 @@ class FormatCommandTest extends ContainerTestCase
      * @param array $argv
      * @return array
      */
-    private function runCommand(array $argv = []) {
+    private function runCommand(array $argv = [])
+    {
         $input = new ArgvInput($argv);
         $output = new BufferedOutput();
 

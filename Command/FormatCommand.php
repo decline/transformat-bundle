@@ -25,11 +25,14 @@ class FormatCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->addArgument(static::ARGUMENT_FILENAME, InputArgument::OPTIONAL, 'A single filename in the configured directory.')
+            ->addArgument(
+                static::ARGUMENT_FILENAME,
+                InputArgument::OPTIONAL,
+                'A single filename in the configured directory.'
+            )
             ->setName(static::COMMAND_NAME)
             ->setDescription('Format translation files.')
-            ->setHelp('Formats the configured set of translation files and performs some validity checks.')
-        ;
+            ->setHelp('Formats the configured set of translation files and performs some validity checks.');
     }
 
     /**

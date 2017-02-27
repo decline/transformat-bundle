@@ -5,8 +5,8 @@ namespace Decline\TransformatBundle\Tests\App;
 use Decline\TransformatBundle\DeclineTransformatBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Class AppKernel

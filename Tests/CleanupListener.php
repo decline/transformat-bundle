@@ -18,10 +18,12 @@ class CleanupListener extends BaseTestListener
     public function endTestSuite(\PHPUnit_Framework_TestSuite $suite)
     {
         $fs = new Filesystem();
-        $fs->remove([
-            __DIR__.'/App/cache',
-            __DIR__.'/App/logs',
-        ]);
+        $fs->remove(
+            [
+                __DIR__.'/App/cache',
+                __DIR__.'/App/logs',
+            ]
+        );
     }
 
 }

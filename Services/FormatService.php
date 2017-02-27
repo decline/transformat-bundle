@@ -55,7 +55,12 @@ class FormatService
 
         // check if directory contains files
         if (empty($files)) {
-            return [sprintf('No supported files could be found in the configured directory %s!', $this->getDirectory())];
+            return [
+                sprintf(
+                    'No supported files could be found in the configured directory %s!',
+                    $this->getDirectory()
+                ),
+            ];
         }
 
         $errors = [];
@@ -83,7 +88,8 @@ class FormatService
      * @param string|null $fileName
      * @return File[]
      */
-    private function getPreparedFileset($fileName = null) {
+    private function getPreparedFileset($fileName = null)
+    {
         $filesToCheck = $fileName ? [$fileName] : scandir($this->getDirectory());
         $preparedFileset = [];
         foreach ($filesToCheck as $fileToCheck) {
