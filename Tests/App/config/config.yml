@@ -1,0 +1,12 @@
+framework:
+    test: true
+    secret: test
+    session:
+        storage_id: session.storage.mock_file
+
+decline_transformat:
+    directory: "%kernel.root_dir%/Resources/translations"
+    xliff:
+        sourceLanguage: en
+        extension: xlf
+        namespace: "urn:oasis:names:tc:xliff:document:1.2"
