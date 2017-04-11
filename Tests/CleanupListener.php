@@ -20,8 +20,8 @@ class CleanupListener extends BaseTestListener
         $fs = new Filesystem();
         $fs->remove(
             [
-                __DIR__.'/App/cache',
-                __DIR__.'/App/logs',
+                __DIR__ . '/App/cache',
+                __DIR__ . '/App/logs',
             ]
         );
     }

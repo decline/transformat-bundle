@@ -77,7 +77,7 @@ class FormatService
                 $this->formatSingleFile($file);
                 $msg = sprintf('<info>Success:</info> %s', $file->getFilename());
             } catch (Exception $e) {
-                $errors[] = $file->getFilename().': '.$e->getMessage();
+                $errors[] = $file->getFilename() . ': ' . $e->getMessage();
                 $msg = sprintf('<fg=red>Failure:</fg=red> %s', $file->getFilename());
             }
 
@@ -106,7 +106,7 @@ class FormatService
             }
 
             try {
-                $file = new File($this->getDirectory().'/'.$fileToCheck);
+                $file = new File($this->getDirectory() . '/' . $fileToCheck);
             } catch (FileNotFoundException $e) {
                 continue;
             }
