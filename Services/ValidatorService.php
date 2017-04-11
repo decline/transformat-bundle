@@ -46,7 +46,7 @@ class ValidatorService
     {
         $errors = [];
 
-        switch($this->getValidationMode()) {
+        switch ($this->getValidationMode()) {
             case static::MODE_STRICT:
                 $schema = 'xliff-core-1.2-strict.xsd';
                 break;

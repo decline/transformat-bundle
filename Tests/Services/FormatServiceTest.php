@@ -11,7 +11,7 @@ use Decline\TransformatBundle\Tests\ContainerTestCase;
 class FormatServiceTest extends ContainerTestCase
 {
 
-    const RESOURCES_DIR = __DIR__.'/../App/Resources';
+    const RESOURCES_DIR = __DIR__ . '/../App/Resources';
 
     const TRANSLATION_UNFORMATTED = 'translations-unformatted/unformatted.de.xlf';
     const TRANSLATION_FORMATTED = 'translations-unformatted/formatted.de.xlf';
