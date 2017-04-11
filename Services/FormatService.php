@@ -160,8 +160,8 @@ class FormatService
         $transUnits = array();
         foreach ($xml->xpath('//x:file/x:body/x:trans-unit') as $translation) {
             /** @var SimpleXMLElement $translation */
-            $source = (string) $translation->source;
-            $target = (string) $translation->target;
+            $source = str_replace('&', '&amp;', (string) $translation->source);
+            $target = str_replace('&', '&amp;', (string) $translation->target);
 
             if (array_key_exists($source, $transUnits)) {
                 throw new DuplicateKeyException($source, $file->getFilename());
