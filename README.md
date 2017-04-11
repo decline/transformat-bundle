@@ -1,4 +1,7 @@
 # transformat-bundle
+
+[![Build Status](https://travis-ci.org/decline/transformat-bundle.svg?branch=master)](https://travis-ci.org/decline/transformat-bundle)
+
 Symfony Bundle to format and sort translation files
 
 Have you ever been fed up about keeping the content of your Symfony translation files organized, well structured and sorted? Yeah, me too. That's why I developed this little bundle to make things easier.
