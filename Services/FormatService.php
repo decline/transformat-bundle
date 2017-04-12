@@ -38,9 +38,10 @@ class FormatService
 
     /**
      * FormatService constructor.
-     * @param $config
+     *
+     * @param                   $config
      * @param \Twig_Environment $twig
-     * @param ValidatorService $validator
+     * @param ValidatorService  $validator
      */
     public function __construct($config, \Twig_Environment $twig, ValidatorService $validator)
     {
@@ -53,7 +54,7 @@ class FormatService
      * Formats the configured set of translation files
      *
      * @param SymfonyStyle $io
-     * @param string|null $fileName Name of single file to format
+     * @param string|null  $fileName Name of single file to format
      *
      * @return array List of Errors
      */
@@ -94,6 +95,7 @@ class FormatService
      * Create a set of files on which the formatting should be performed
      *
      * @param string|null $fileName
+     *
      * @return File[]
      */
     private function getPreparedFileset($fileName = null)
@@ -126,6 +128,7 @@ class FormatService
      * Formats a single translation file and updates its content
      *
      * @param File $file
+     *
      * @throws DuplicateKeyException
      * @throws \Symfony\Component\HttpFoundation\File\Exception\FileException
      * @throws \Twig_Error_Loader
@@ -146,6 +149,30 @@ class FormatService
             throw new FileException('File %s is not writable!', $file->getFilename());
         }
 
+        // render template
+        $twigContext = [
+            'namespace'      => $this->getXliffNamespace(),
+            'sourceLanguage' => $this->getXliffSourceLanguage(),
+            'transUnits'     => $this->getTransUnits($file),
+        ];
+        $formattedOutput = $this->twig->render('@DeclineTransformat/format.xml.twig', $twigContext);
+
+        // update file with formatted content
+        file_put_contents($file->getPathname(), $formattedOutput);
+    }
+
+    /**
+     * Validates the given file and returns the sorted trans-units
+     *
+     * @param File $file
+     *
+     * @return array
+     * @throws DuplicateKeyException
+     * @throws InvalidSchemaException
+     * @throws NoTransUnitsFoundException
+     */
+    private function getTransUnits(File $file)
+    {
         // get content of xliff file
         $xliffContent = file_get_contents($file->getPathname());
 
@@ -160,15 +187,15 @@ class FormatService
         $transUnits = array();
         foreach ($xml->xpath('//x:file/x:body/x:trans-unit') as $translation) {
             /** @var SimpleXMLElement $translation */
-            $source = str_replace('&', '&amp;', (string) $translation->source);
-            $target = str_replace('&', '&amp;', (string) $translation->target);
+            $source = str_replace('&', '&amp;', (string)$translation->source);
+            $target = str_replace('&', '&amp;', (string)$translation->target);
 
             if (array_key_exists($source, $transUnits)) {
                 throw new DuplicateKeyException($source, $file->getFilename());
             }
 
             $transUnits[$source] = [
-                'id' => $source,
+                'id'     => $source,
                 'source' => $source,
                 'target' => $target,
             ];
@@ -178,21 +205,10 @@ class FormatService
             throw new NoTransUnitsFoundException($file->getFilename());
         }
 
-        //IMPORTANT: we need to use case-senstivie sorting, or else it will screw up when merging etc.
+        // we need to use case-senstivie sorting, or else it will screw up when merging etc.
         ksort($transUnits);
-        //ksort($translations, SORT_STRING | SORT_FLAG_CASE);
-        //uksort($translations, "strnatcasecmp");
 
-        // render template
-        $twigContext = [
-            'namespace' => $this->getXliffNamespace(),
-            'sourceLanguage' => $this->getXliffSourceLanguage(),
-            'transUnits' => $transUnits,
-        ];
-        $formattedOutput = $this->twig->render('@DeclineTransformat/format.xml.twig', $twigContext);
-
-        // update file with formatted content
-        file_put_contents($file->getPathname(), $formattedOutput);
+        return $transUnits;
     }
 
     /**

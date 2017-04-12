@@ -3,19 +3,14 @@
 namespace Decline\TransformatBundle\Tests\Services;
 
 use Decline\TransformatBundle\Tests\ContainerTestCase;
+use Decline\TransformatBundle\Tests\Services\Interfaces\ServiceTestInterface;
 
 /**
  * Class FormatServiceTest
  * @package Decline\TransformatBundle\Tests\Services
  */
-class FormatServiceTest extends ContainerTestCase
+class FormatServiceTest extends ContainerTestCase implements ServiceTestInterface
 {
-
-    const RESOURCES_DIR = __DIR__ . '/../App/Resources';
-
-    const TRANSLATION_UNFORMATTED = 'translations-unformatted/unformatted.de.xlf';
-    const TRANSLATION_FORMATTED = 'translations-unformatted/formatted.de.xlf';
-    const TRANSLATION_EXPECTED = 'translations-unformatted/expected.de.xlf';
 
     /**
      * Tests the actual formatting / ordering of the files content
