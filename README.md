@@ -1,6 +1,6 @@
 # transformat-bundle
 
-[![Build Status](https://travis-ci.org/decline/transformat-bundle.svg?branch=master)](https://travis-ci.org/decline/transformat-bundle) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/decline/transformat-bundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/decline/transformat-bundle/?branch=master)
+[![Build Status](https://travis-ci.org/decline/transformat-bundle.svg?branch=master)](https://travis-ci.org/decline/transformat-bundle) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/decline/transformat-bundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/decline/transformat-bundle/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/decline/transformat-bundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/decline/transformat-bundle/?branch=master)
 
 Symfony Bundle to format and sort translation files
 
