@@ -49,19 +49,19 @@ class ValidatorServiceTest extends ContainerTestCase implements ServiceTestInter
 
     /**
      * Returns the content of a valid xliff file
-     * @return bool|string
+     * @return string
      */
     private function getValidXliff()
     {
-        return file_get_contents(static::RESOURCES_DIR . '/' . static::TRANSLATION_VALID);
+        return (string) file_get_contents(static::RESOURCES_DIR . '/' . static::TRANSLATION_VALID);
     }
 
     /**
      * Returns the content of an invalid xliff file
-     * @return bool|string
+     * @return string
      */
     private function getInvalidXliff()
     {
-        return file_get_contents(static::RESOURCES_DIR . '/' . static::TRANSLATION_INVALID);
+        return (string) file_get_contents(static::RESOURCES_DIR . '/' . static::TRANSLATION_INVALID);
     }
 }
